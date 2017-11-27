@@ -18,6 +18,7 @@ int main()
     transceiver.turnOn();
 
     unsigned char sendpkt[10];
+    memset(sendpkt,0,sizeof(sendpkt));
     unsigned char recvpkt[125];
 
     long long int start_ts = 0;
@@ -32,7 +33,7 @@ int main()
             start_ts = getTime();
             start_ts += 30000000;
             transceiver.sendAt(sendpkt, sizeof(sendpkt), start_ts, Transceiver::Unit::NS);
-            printf("packet sent to anchor %c @ %lld\n", i, start_ts);
+            //printf("packet sent to anchor %c @ %lld\n", i, start_ts);
             ledOn();
             try {
                 result = transceiver.recv(recvpkt, sizeof(recvpkt), infiniteTimeout, Transceiver::Unit::NS);
@@ -53,6 +54,7 @@ int main()
             {
                 printf("wrong response\n");
             }
+            memDump(recvpkt,result.size);
         }
     Thread::sleep(SLEEP);
     }
